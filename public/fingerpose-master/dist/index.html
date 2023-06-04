@@ -17,7 +17,7 @@
 
   <!-- The fingerpose library -->
   <script src="fingerpose.js" type="text/javascript"></script>
-
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -418,68 +418,41 @@
   </script>
 
 <script>
-  /*window.addEventListener('DOMContentLoaded', function() {
-    var submitBtn = document.getElementById('submit-btn');
-    var inputText = document.getElementById('input-text');
-    var responseText = document.getElementById('response-text');
-
-    document.getElementById('submit-btn').addEventListener('click', function() {
-      var inputValue = inputText.value;
-
-      // Your ChatGPT API key
-      var apiKey = 'YOUR_CHATGPT_API_KEY';
-
-      // Send a request to ChatGPT API
-      axios.post('https://api.openai.com/v1/engines/davinci-codex/completions', {
-        prompt: inputValue,
-        max_tokens: 50
-      }, {
-        headers: {
-          'Authorization': 'Bearer ' + apiKey,
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(function(response) {
-        var output = response.data.choices[0].text.trim();
-
-        // Update the response text box with the ChatGPT response
-        responseText.value = output;
-      })
-      .catch(function(error) {
-        responseText.value = 'Error: ' + error.message;
-      });
-    });
-  });*/
-
   function sendToGPT() {
-    var submitBtn = document.getElementById('submit-btn');
-    var inputText = document.getElementById('text-input');
-    var responseText = document.getElementById('response-text');  
-    var inputValue = inputText.value;
+        var submitBtn = document.getElementById('submit-btn');
+        var inputText = document.getElementById('text-input');
+        var responseText = document.getElementById('response-text');  
+        var inputValue = inputText.value;
+  
+          // Your ChatGPT API key
+          var apiKey = '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';
+  
+          // Send a request to ChatGPT API
+          
+          $.ajax({
+                url: 'https://api.openai.com/v1/chat/completions',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer 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'
+                },
+                method: 'POST',
+                data: JSON.stringify({
+                    'model': 'gpt-3.5-turbo',
+                    'messages': [{'role': 'system', 'content': 'You are a helpful assistant.'}, {'role': 'user', 'content': inputValue}]
+                }),
+                success: function(response) {
+                    // Extract the generated response from the API
+                    var chatGPTResponse = response.choices[0].message.content;
 
-      // Your ChatGPT API key
-      var apiKey = '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';
+                    // Set the generated response in the second text box
+                    responseText.value = chatGPTResponse;
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
 
-      // Send a request to ChatGPT API
-      axios.post('https://api.openai.com/v1/engines/davinci-codex/completions', {
-        prompt: inputValue,
-        max_tokens: 50
-      }, {
-        headers: {
-          'Authorization': 'Bearer ' + apiKey,
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(function(response) {
-        var output = response.data.choices[0].text.trim();
-
-        // Update the response text box with the ChatGPT response
-        responseText.value = output;
-      })
-      .catch(function(error) {
-        responseText.value = 'Error: ' + error.message;
-      });
-    }
+          }
 </script>
 
 </body>

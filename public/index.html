@@ -26,6 +26,7 @@
     -->
     <title>Talk2Me</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
       body {
         margin: 0;
@@ -119,7 +120,7 @@
         
         // Enable/disable buttons
         document.getElementById("startButton").style.display = 'none';
-      document.getElementById("stopButton").style.display = 'inline';
+        document.getElementById("stopButton").style.display = 'inline-block';
       }
       
       function stopListening() {
@@ -127,8 +128,8 @@
         isListening = false;
         
         // Enable/disable buttons
-        document.getElementById("startButton").style.display = 'inline';
-      document.getElementById("stopButton").style.display = 'none';
+        document.getElementById("startButton").style.display = 'inline-block';
+        document.getElementById("stopButton").style.display = 'none';
       }
       
       function openGestureInput() {
@@ -175,7 +176,7 @@
         axios.post('https://api.openai.com/v1/engines/davinci-codex/completions', data, {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer YOUR_OPENAI_API_KEY',
+            'Authorization': 'Bearer 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',
           },
         })
           .then(function (response) {
@@ -284,28 +285,34 @@
         var inputValue = inputText.value;
   
           // Your ChatGPT API key
-          var apiKey = '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';
+          var apiKey = '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';
   
           // Send a request to ChatGPT API
-          axios.post('https://api.openai.com/v1/engines/davinci-codex/completions', {
-            prompt: inputValue,
-            max_tokens: 50
-          }, {
-            headers: {
-              'Authorization': 'Bearer ' + apiKey,
-              'Content-Type': 'application/json'
-            }
-          })
-          .then(function(response) {
-            var output = response.data.choices[0].text.trim();
-  
-            // Update the response text box with the ChatGPT response
-            responseText.value = output;
-          })
-          .catch(function(error) {
-            responseText.value = 'Error: ' + error.message;
-          });
-        }
+          
+          $.ajax({
+                url: 'https://api.openai.com/v1/chat/completions',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer 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'
+                },
+                method: 'POST',
+                data: JSON.stringify({
+                    'model': 'gpt-3.5-turbo',
+                    'messages': [{'role': 'system', 'content': 'You are a helpful assistant.'}, {'role': 'user', 'content': inputValue}]
+                }),
+                success: function(response) {
+                    // Extract the generated response from the API
+                    var chatGPTResponse = response.choices[0].message.content;
+
+                    // Set the generated response in the second text box
+                    responseText.value = chatGPTResponse;
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+
+          }
     </script>
   </body>
 </html>

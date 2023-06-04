@@ -14,7 +14,7 @@ function SpeechToText() {
                 <a id='startButton' onClick={window['startListening']} href='#0' className="button" style={{backgroundColor: 'green', width: '300px'}}>Start</a>
                 <a id='stopButton' onClick={window['stopListening']} href='#0' className="button" style={{backgroundColor: 'red', width: '300px', display: 'none'}}>Stop</a>
             </div>
-            <button id="submit-btn" onClick={window['sendToGPT']} className="button" style={{width: '300px'}}>Ask Chat GPT</button>
+            <a id="submit-btn" href='#0' onClick={window['sendToGPT']} className="button" style={{width: '300px'}}>Ask Chat GPT</a>
 
             <div className="input-container">
                 <textarea id="response-text" placeholder="Chat GPT response will go here..."></textarea>

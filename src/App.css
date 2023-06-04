@@ -93,6 +93,13 @@ img{
   width: 100%;
 }
 
-.btn-container a{
-  height: 100%;
+.btn-container{
+  display: flex;
+  justify-content: center;
+}
+
+@media only screen and (max-width: 600px) {
+  .btn-container{
+    display: inline;
+  }
 }

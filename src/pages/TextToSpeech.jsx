@@ -9,7 +9,7 @@ function TextToSpeech() {
             <div className="input-container">
                 <textarea id="text-input" placeholder="Type here..."></textarea>
             </div>
-            <button id="submit-btn" onClick={window['sendToGPT']} className="button" style={{width: '300px'}}>Ask Chat GPT</button>
+            <a id="submit-btn" href='#0' onClick={window['sendToGPT']} className="button" style={{width: '300px'}}>Ask Chat GPT</a>
 
             <div className="input-container">
                 <textarea id="response-text" placeholder="Chat GPT response will go here..."></textarea>
