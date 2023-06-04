@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+
+html, div{
+  display: inline;
+}
+
+body {
+  text-align: center;
+  background-color: #212121;
+  color: #ffffff;
+  font-family: 'Orbitron', sans-serif;
+  margin: auto;
+}
+
+h1 {
+  font-size: 54px;
+  margin-top: 80px;
+  text-transform: uppercase;
+}
+
+p {
+  font-size: 30px;
+  margin-bottom: 40px;
+}
+
+.button {
+  display: inline-block;
+  padding: 15px 30px;
+  font-size: 32px;
+  background-color: #03a9f4;
+  color: #ffffff;
+  text-decoration: none;
+  border: none;
+  border-radius: 10px;
+  margin: 20px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  width:20%;
+  transition: 0.7s;
+}
+
+@media only screen and (max-width: 900px) {
+  .button{
+    /*width: 60%;*/
+    font-size: 20px;
+  }
+}
+
+.button:hover {
+  background-color: #0074aa;
+  transform: scale(1.1) perspective(1px);
+}
+
+.input-container textarea {
+  font-size: 36px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #333333;
+  color: #ffffff;
+  transition: background-color 0.3s ease;
+  resize: vertical;
+  width: 90%;
+}
+
+.input-container textarea:focus {
+  background-color: #444444;
+  border-color: #03a9f4;
+}
+
+.fade{
+  animation: fadeIn 2s ease-in; 
+}
+
+@keyframes fadeIn {  
+  from {  
+      opacity:0;  
+  }  
+
+  to {  
+      opacity:1;  
+  }  
+}
+
+.back {
+  background-color: #7d7d7d;
+}
+.back:hover{
+  background-color: #3e3e3e;
+}
+
+img{
+  width: 100%;
+}
+
+.btn-container a{
+  height: 100%;
+}

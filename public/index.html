@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/logo.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Communication solution for people with special needs."
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo.ico" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>Talk2Me</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      .splash-container {
+        position: absolute;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 1;
+        transition: opacity 1s;
+        background-image: url('splash.png');
+        background-repeat: no-repeat;
+        background-position-x: center;
+      }
+
+      .splash-content {
+        text-align: center;
+      }
+
+      .splash-content h1 {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .splash-content p {
+        font-size: 14px;
+        color: #777;
+      }
+
+    </style>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="splashScreen" class="splash-container">
+    </div>
+    <div id="root" class="main-content"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+
+    <script>
+      const voiceList = document.getElementById("voice-list");
+      const textList = document.getElementById("text-list");
+      const textInput = document.getElementById("text-input");
+      const history = new Set();
+    
+      function convertTextToSpeech() {
+        const text = document.getElementById("text-input").value;
+        const utterance = new SpeechSynthesisUtterance();
+        utterance.text = text;
+        speechSynthesis.speak(utterance);
+        document.getElementById("text-input").value = '';
+      }
+      
+      function convertSpeechToText() {
+        const recognition = new webkitSpeechRecognition();
+        recognition.lang = 'en-US';
+        
+        recognition.start();
+        
+        recognition.onresult = function(event) {
+          const result = event.results[0][0].transcript;
+          document.getElementById("text-input").value = result;
+        }
+        
+        recognition.onerror = function(event) {
+          console.log('Error occurred in speech recognition: ' + event.error);
+        }
+      }
+      
+      function openGestureInput() {
+        const gestures = ["thumbs up", "thumbs down", "wave", "clap"];
+        const recognizedGesture = prompt("Enter a gesture: " + gestures.join(", "));
+        
+        switch (recognizedGesture) {
+          case "thumbs up":
+            // Perform action for thumbs up gesture
+            alert("Thumbs up gesture recognized!");
+            break;
+          case "thumbs down":
+            // Perform action for thumbs down gesture
+            alert("Thumbs down gesture recognized!");
+            break;
+          case "wave":
+            // Perform action for wave gesture
+            alert("Wave gesture recognized!");
+            break;
+          case "clap":
+            // Perform action for clap gesture
+            alert("Clap gesture recognized!");
+            break;
+          default:
+            alert("Unrecognized gesture!");
+        }
+        
+        addToHistory(recognizedGesture, "Gesture");
+      }
+      
+      function sendRequest() {
+        const userInput = textInput.value;
+        const responseOutput = document.getElementById("response-output");
+    
+        const data = {
+          prompt: userInput,
+          max_tokens: 50,
+          temperature: 0.6,
+          top_p: 1.0,
+          frequency_penalty: 0.0,
+          presence_penalty: 0.0
+        };
+    
+        axios.post('https://api.openai.com/v1/engines/davinci-codex/completions', data, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer YOUR_OPENAI_API_KEY',
+          },
+        })
+          .then(function (response) {
+            const outputText = response.data.choices[0].text.trim();
+            responseOutput.value += outputText + '\n';
+            addToHistory(outputText, "ChatGPT");
+          })
+          .catch(function (error) {
+            console.log('Error occurred while sending request to ChatGPT: ' + error);
+          });
+      }
+      
+      function addToHistory(text, type) {
+        if (!history.has(text)) {
+          const listItem = document.createElement("li");
+          const listItemContent = document.createTextNode(text);
+          listItem.appendChild(listItemContent);
+          
+          listItem.addEventListener("click", function() {
+            if (type === "Voice") {
+              const utterance = new SpeechSynthesisUtterance(text);
+              speechSynthesis.speak(utterance);
+            } else if (type === "Text") {
+              textInput.value = text;
+            }
+          });
+          
+          if (type === "Voice") {
+            voiceList.appendChild(listItem);
+          } else if (type === "Text") {
+            textList.appendChild(listItem);
+          }
+          
+          history.add(text);
+        }
+      }
+      
+      function toggleCategory(category) {
+        const categoryList = document.getElementById(category + "-list");
+        categoryList.style.display = categoryList.style.display === "none" ? "block" : "none";
+      }
+    </script>
+    <script>
+      let played = false;
+      
+      document.addEventListener('DOMContentLoaded', function() {
+        const hasSplashScreenShown = sessionStorage.getItem('hasSplashScreenShown');
+
+        if(!hasSplashScreenShown){
+          sessionStorage.setItem('hasSplashScreenShown', 'true');
+          const splashScreen = document.getElementById('splashScreen');
+          const root = document.getElementById('root');
+          
+          setTimeout(function() {
+            splashScreen.style.opacity = '0';
+            setTimeout(function() {
+              splashScreen.remove();
+              played = true;
+            }, 1000);
+          }, 3000);
+        }
+        else{
+          splashScreen.remove();
+        }
+      });
+
+    </script>
+  </body>
+</html>
