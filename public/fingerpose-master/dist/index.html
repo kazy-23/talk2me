@@ -143,6 +143,7 @@
 
   <link rel="stylesheet" href="help.css">
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  
 </head>
 
 <body>
@@ -416,7 +417,7 @@
       console.log("Canvas initialized")
     });
   </script>
-
+<script src="/config.js"></script>
 <script>
   function sendToGPT() {
         var submitBtn = document.getElementById('submit-btn');
@@ -425,7 +426,8 @@
         var inputValue = inputText.value;
   
           // Your ChatGPT API key
-          var apiKey = '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';
+          var apiKey = api_config.SECRET_KEY;
+          console.log(apiKey);
   
           // Send a request to ChatGPT API
           
