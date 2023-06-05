@@ -427,7 +427,6 @@
   
           // Your ChatGPT API key
           var apiKey = api_config.SECRET_KEY;
-          console.log(apiKey);
   
           // Send a request to ChatGPT API
           
@@ -435,7 +434,7 @@
                 url: 'https://api.openai.com/v1/chat/completions',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer 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'
+                    'Authorization': 'Bearer ' + apiKey
                 },
                 method: 'POST',
                 data: JSON.stringify({

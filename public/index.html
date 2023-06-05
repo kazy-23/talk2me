@@ -93,10 +93,11 @@
         let question = document.getElementById("text-input").value;
         if(question.length===0)question=' nothing ';
         let answer = document.getElementById("response-text").value;
-        if(answer.length===0)answer=' with nothing ';
+        if(answer.length===0)answer='';
+        else answer = " and Chat GPT responded: " + answer;
         
         const utterance = new SpeechSynthesisUtterance();
-        utterance.text = "You wrote: " + question + " and Chat GPT responded: " + answer;
+        utterance.text = "You wrote: " + question + answer;
         speechSynthesis.speak(utterance);
       }
       
@@ -255,7 +256,6 @@
   
           // Your ChatGPT API key
           var apiKey = api_config.SECRET_KEY;
-          console.log(apiKey);
   
           // Send a request to ChatGPT API
           
@@ -263,7 +263,7 @@
                 url: 'https://api.openai.com/v1/chat/completions',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer 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'
+                    'Authorization': 'Bearer ' + apiKey
                 },
                 method: 'POST',
                 data: JSON.stringify({
